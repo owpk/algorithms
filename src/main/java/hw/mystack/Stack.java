@@ -1,4 +1,4 @@
-package ru.geekbrains.ads.lesson3.mystack;
+package hw.mystack;
 
 public interface Stack<E> {
 

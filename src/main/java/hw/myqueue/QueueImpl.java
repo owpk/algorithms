@@ -1,4 +1,4 @@
-package hw;
+package hw.myqueue;
 
 public class QueueImpl<E> implements Queue<E> {
 

@@ -1,15 +1,9 @@
-package ru.geekbrains.ads.lesson3.mystack;
+package hw.mystack;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Brackets {
-
-    private static final String TEXT = """
-                public void push(E value) {
-                    data[size++] = value;
-                }
-            """;
 
     private static final Map<Character, Character> BRACKETS = new HashMap<>() {{
         put('{', '}');
@@ -18,7 +12,7 @@ public class Brackets {
     }};
 
     public static void main(String[] args) {
-        new Brackets(TEXT).check();
+        new Brackets("").check();
     }
 
 

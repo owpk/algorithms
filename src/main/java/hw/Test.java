@@ -1,7 +1,10 @@
 package hw;
 
-import ru.geekbrains.ads.lesson3.mystack.Stack;
-import ru.geekbrains.ads.lesson3.mystack.StackImpl;
+
+import hw.myqueue.PriorityQueue;
+import hw.myqueue.Queue;
+import hw.mystack.Stack;
+import hw.mystack.StackImpl;
 
 public class Test {
 

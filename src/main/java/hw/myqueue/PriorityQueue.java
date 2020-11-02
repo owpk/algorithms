@@ -1,4 +1,4 @@
-package hw;
+package hw.myqueue;
 
 public class PriorityQueue<E extends Object & Comparable<? super E> > extends QueueImpl<E> {
 
