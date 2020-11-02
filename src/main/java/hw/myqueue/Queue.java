@@ -1,4 +1,4 @@
-package ru.geekbrains.ads.lesson3.myqueue;
+package hw.myqueue;
 
 public interface Queue<E> {
 
