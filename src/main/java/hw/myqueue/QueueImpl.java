@@ -1,5 +1,7 @@
 package hw.myqueue;
 
+import java.util.Arrays;
+
 public class QueueImpl<E> implements Queue<E> {
 
     private static final int DEFAULT_TAIL = -1;
@@ -61,5 +63,11 @@ public class QueueImpl<E> implements Queue<E> {
     @Override
     public boolean isFull() {
         return data.length == size;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(data);
+
     }
 }

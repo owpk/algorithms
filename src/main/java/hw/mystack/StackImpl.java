@@ -1,5 +1,7 @@
 package hw.mystack;
 
+import java.util.Arrays;
+
 public class StackImpl<E> implements Stack<E> {
 
     private E[] data;
@@ -8,6 +10,11 @@ public class StackImpl<E> implements Stack<E> {
     @SuppressWarnings("unchecked")
     public StackImpl(int maxSize) {
         this.data = (E[]) new Object[maxSize];
+    }
+
+    public StackImpl(E[] data) {
+        this.data = data;
+        size = data.length;
     }
 
     @Override // O(1)
@@ -33,5 +40,11 @@ public class StackImpl<E> implements Stack<E> {
     @Override
     public boolean isFull() {
         return size == data.length;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(data);
+
     }
 }
