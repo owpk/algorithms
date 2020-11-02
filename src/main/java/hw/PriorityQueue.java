@@ -1,4 +1,4 @@
-package ru.geekbrains.ads.lesson3.myqueue;
+package hw;
 
 public class PriorityQueue<E extends Object & Comparable<? super E> > extends QueueImpl<E> {
 

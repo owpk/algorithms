@@ -1,3 +1,5 @@
+package hw;
+
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;

@@ -1,8 +1,5 @@
-package ru.geekbrains.ads.lesson3;
+package hw;
 
-import ru.geekbrains.ads.lesson3.myqueue.PriorityQueue;
-import ru.geekbrains.ads.lesson3.myqueue.Queue;
-import ru.geekbrains.ads.lesson3.myqueue.QueueImpl;
 import ru.geekbrains.ads.lesson3.mystack.Stack;
 import ru.geekbrains.ads.lesson3.mystack.StackImpl;
 

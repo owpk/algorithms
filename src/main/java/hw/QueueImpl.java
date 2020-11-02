@@ -1,4 +1,4 @@
-package ru.geekbrains.ads.lesson3.myqueue;
+package hw;
 
 public class QueueImpl<E> implements Queue<E> {
 
