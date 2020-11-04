@@ -4,14 +4,14 @@ import java.util.Arrays;
 
 public class QueueImpl<E> implements Queue<E> {
 
-    private static final int DEFAULT_TAIL = -1;
-    private static final int DEFAULT_HEAD = 0;
+    protected static final int DEFAULT_TAIL = -1;
+    protected static final int DEFAULT_HEAD = 0;
 
     protected E[] data;
     protected int size;
 
-    private int tail;
-    private int head;
+    protected int tail;
+    protected int head;
 
     @SuppressWarnings("unchecked")
     public QueueImpl(int maxSize) {
