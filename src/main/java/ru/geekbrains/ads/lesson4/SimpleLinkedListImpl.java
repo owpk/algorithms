@@ -110,7 +110,7 @@ public class SimpleLinkedListImpl<E> implements LinkedList<E> {
 
         @Override
         public boolean hasNext() {
-            return node.next != null;
+            return node != null;
         }
 
         @Override

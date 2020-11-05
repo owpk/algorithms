@@ -9,7 +9,7 @@ public class Test {
 
       linkedList.forEach(x -> System.out.println(
              x.chars().mapToObj(i -> (char) i).reduce("", (s1,s2) -> s2 + s1, (s3,s4) -> s4 + "" + s3)));
-
+      System.out.println("--");
       for (String s: linkedList) {
          System.out.println(s);
       }
