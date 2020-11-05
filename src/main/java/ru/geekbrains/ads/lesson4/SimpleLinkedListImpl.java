@@ -115,8 +115,9 @@ public class SimpleLinkedListImpl<E> implements LinkedList<E> {
 
         @Override
         public E next() {
+            E e = node.item;
             node = node.next;
-            return node.item;
+            return e;
         }
     }
 
