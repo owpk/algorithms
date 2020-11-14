@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 public class BackpackQuest {
 
@@ -12,15 +13,24 @@ public class BackpackQuest {
                 new Item(10, 6),
                 new Item(2, 3)));
 
+        //1 Подход через TreeSet и Comparable<Item>
         TreeSet<Item> treeSet = new TreeSet<>(itemList);
-
-        treeSet.forEach(backpack::add);
-
+        for (Item item : treeSet) {
+            if (backpack.countCurrentWeight() + item.getWeight() < backpack.getMaxWeight())
+                backpack.add(item);
+            else break;
+        }
         System.out.println(backpack);
+
+        //2 Подход через рекурсию
+        backpack.itemList  = null;
+        System.out.println(backpack.getBestOption(itemList));
+
     }
 
     public static class Backpack {
         private int maxWeight;
+        private int cost;
         private List<Item> itemList;
 
         public Backpack(int maxWeight) {
@@ -28,13 +38,46 @@ public class BackpackQuest {
             itemList = new ArrayList<>();
         }
 
+        public List<Item> getBestOption(List<Item> items) {
+            if (itemList == null) {
+                if (calculate(Item::getWeight, items) < maxWeight) {
+                    itemList = items;
+                    cost = calculate(Item::getCost, items);
+                }
+            }
+            else {
+                if(calculate(Item::getWeight, items) <= maxWeight && calculate(Item::getCost, items) > cost) {
+                    itemList = items;
+                    cost = calculate(Item::getCost, items);
+                }
+            }
+
+            for (int i = 0; i < items.size(); i++) {
+                List<Item> newSet = new ArrayList<>(items);
+                newSet.remove(i);
+                itemList = getBestOption(newSet);
+            }
+            return itemList;
+        }
+
         public void add(Item item) {
-            if (countCurrentWeight() + item.getWeight() < maxWeight)
-                itemList.add(item);
+            itemList.add(item);
         }
 
         public int countCurrentWeight() {
-            return itemList.stream().map(Item::getWeight).reduce(0, Integer::sum);
+            return calculate(Item::getWeight, itemList);
+        }
+
+        public int countCurrentCost() {
+            return calculate(Item::getCost, itemList);
+        }
+
+        private int calculate(Function<Item, Integer> function, List<Item> list) {
+            return list.stream().map(function).reduce(0, Integer::sum);
+        }
+
+        public int getMaxWeight() {
+            return maxWeight;
         }
 
         @Override
@@ -58,10 +101,14 @@ public class BackpackQuest {
             return weight;
         }
 
+        public int getCost() {
+            return cost;
+        }
+
         @Override
         public int compareTo(Item o) {
             int diff = Math.round(((float) o.cost / o.weight) * 10) -
-                    Math.round(((float)  cost / weight) * 10);
+                    Math.round(((float) cost / weight) * 10);
             if (diff == 0) return 1;
             return diff;
         }
