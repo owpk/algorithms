@@ -40,13 +40,13 @@ public class BackpackQuest {
         public List<Item> getBestOption(List<Item> items) {
             if (calculate(Item::getWeight, items) <= maxWeight && calculate(Item::getCost, items) > cost) {
                 itemList = items;
-                cost = calculate(Item::getCost, items);
+                cost = countCurrentCost();
             }
 
             for (int i = 0; i < items.size(); i++) {
-                List<Item> newSet = new ArrayList<>(items);
-                newSet.remove(i);
-                itemList = getBestOption(newSet);
+                List<Item> tmp = new ArrayList<>(items);
+                tmp.remove(i);
+                itemList = getBestOption(tmp);
             }
             return itemList;
         }
