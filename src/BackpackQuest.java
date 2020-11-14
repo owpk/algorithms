@@ -13,7 +13,11 @@ public class BackpackQuest {
                 new Item(10, 6),
                 new Item(2, 3)));
 
-        //1 Подход через TreeSet и Comparable<Item>
+        //1 Подход через рекурсию
+        List<Item> result = backpack.getBestOption(itemList);
+        System.out.println(result);
+
+        //2 Подход через TreeSet и Comparable<Item>
         TreeSet<Item> treeSet = new TreeSet<>(itemList);
         for (Item item : treeSet) {
             if (backpack.countCurrentWeight() + item.getWeight() < backpack.getMaxWeight())
@@ -21,11 +25,6 @@ public class BackpackQuest {
             else break;
         }
         System.out.println(backpack);
-
-        //2 Подход через рекурсию
-        backpack.itemList  = null;
-        System.out.println(backpack.getBestOption(itemList));
-
     }
 
     public static class Backpack {
@@ -39,17 +38,9 @@ public class BackpackQuest {
         }
 
         public List<Item> getBestOption(List<Item> items) {
-            if (itemList == null) {
-                if (calculate(Item::getWeight, items) < maxWeight) {
-                    itemList = items;
-                    cost = calculate(Item::getCost, items);
-                }
-            }
-            else {
-                if(calculate(Item::getWeight, items) <= maxWeight && calculate(Item::getCost, items) > cost) {
-                    itemList = items;
-                    cost = calculate(Item::getCost, items);
-                }
+            if (calculate(Item::getWeight, items) <= maxWeight && calculate(Item::getCost, items) > cost) {
+                itemList = items;
+                cost = calculate(Item::getCost, items);
             }
 
             for (int i = 0; i < items.size(); i++) {
