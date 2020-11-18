@@ -4,9 +4,13 @@ import java.util.Stack;
 import java.util.function.Consumer;
 
 public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
-
+    private final int MAX_DEPTH = 4;
     private Node<E> root;
     private int size;
+
+    public Node<E> getRoot() {
+        return root;
+    }
 
     @Override
     public boolean add(E value) {
@@ -42,8 +46,8 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
     private NodeAndParent doFind(E value) {
         Node<E> previous = null;
         Node<E> current = root;
-
-        while (current != null) {
+        int depth = 0;
+        while (current != null && depth++ < MAX_DEPTH) {
             if (current.getValue().equals(value)) {
                 return new NodeAndParent(current, previous);
             }
@@ -232,5 +236,16 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         System.out.println("................................................................");
 
 
+    }
+
+    public boolean isBalanced(Node<E> node) {
+        return (node == null) ||
+                isBalanced(node.getLeftChild()) &&
+                        isBalanced(node.getRightChild()) &&
+                        Math.abs(height(node.getLeftChild()) - height(node.getRightChild())) <= 1;
+    }
+
+    private int height(Node<E> node) {
+        return node == null ? 0 : 1 + Math.max(height(node.getLeftChild()), height(node.getRightChild()));
     }
 }
