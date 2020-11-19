@@ -4,14 +4,17 @@ import java.util.Stack;
 import java.util.function.Consumer;
 
 public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
-    private final int MAX_DEPTH = 4;
+    public final int MAX_DEPTH = 4;
+    private int currentDepth;
     private Node<E> root;
     private int size;
-
     public Node<E> getRoot() {
         return root;
     }
 
+    public int getCurrentDepth() {
+        return currentDepth;
+    }
     @Override
     public boolean add(E value) {
         Node<E> newNode = new Node<>(value);
@@ -59,7 +62,7 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
                 current = current.getLeftChild();
             }
         }
-
+        currentDepth = depth;
         return new NodeAndParent(null, previous);
     }
 
