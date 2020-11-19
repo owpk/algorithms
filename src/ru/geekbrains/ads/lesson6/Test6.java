@@ -32,10 +32,10 @@ public class Test6 {
         int numOfCores = Runtime.getRuntime().availableProcessors();
         ExecutorService executorService = Executors.newFixedThreadPool(
                 numOfCores * (1 + 50 / 5));
-        final int TREES_NUM = 20;
-        final CountDownLatch cdl = new CountDownLatch(TREES_NUM);
+        int treesNum = 20;
+        final CountDownLatch cdl = new CountDownLatch(treesNum);
         List<Integer> resultList = Collections.synchronizedList(new ArrayList<>());
-        for (int i = 0; i < TREES_NUM; i++)
+        for (int i = 0; i < treesNum; i++)
             executorService.submit(createTreeAndCheckIfBalanced(i, resultList, cdl));
         cdl.await();
         System.out.printf("(balanced / unbalanced) k = %f", 1f * count(resultList, 1) /
