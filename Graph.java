@@ -126,4 +126,56 @@ public class Graph {
         resetVertexState();
     }
 
+    public void findShortest(String start, String end) {
+        int startIndex = indexOf(start);
+        int endIndex = indexOf(end);
+
+        Queue<Vertex> queue = new LinkedList<>();
+        Vertex startV = vertexList.get(startIndex);
+        Vertex endV = vertexList.get(endIndex);
+
+        Node node = new Node(startV);
+
+        visitVertexAndCreatePath(startV, endV, node, queue);
+
+    }
+
+    private void visitVertexAndCreatePath(Vertex startVertex,
+                                          Vertex endVertex,
+                                          Node node,
+                                          Queue<Vertex> queue) {
+        queue.add(startVertex);
+        startVertex.setVisited(true);
+
+        if (startVertex.getLabel().equals(endVertex.getLabel())) {
+            System.out.println(node);
+            return;
+        }
+
+        while (!queue.isEmpty()) {
+            Vertex last = queue.peek();
+            startVertex = getNearUnvisitedVertex(last);
+
+            if (startVertex != null) {
+                Node nd = new Node(startVertex);
+                nd.prevNode = node;
+                visitVertexAndCreatePath(startVertex, endVertex, node, queue);
+            } else {
+                node = nd;
+                queue.remove();
+            }
+        }
+        resetVertexState();
+    }
+
+    private static class Node {
+        private Vertex curr;
+        private Node prevNode;
+
+        public Node(Vertex curr) {
+            this.curr = curr;
+        }
+    }
+
+
 }
