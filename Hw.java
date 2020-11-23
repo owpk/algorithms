@@ -25,6 +25,10 @@ public class Hw {
         graph.addEdge("Курск", "Воронеж");
 
         graph.bfs("Москва");
+
+        System.out.println("-------------------------");
         graph.findShortest("Москва", "Воронеж");
+        graph.findShortest("Тула", "Курск");
+        graph.findShortest("Саратов", "Орел");
     }
 }
