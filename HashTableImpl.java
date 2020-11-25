@@ -4,11 +4,30 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
     static class Node<K, V> implements Entry<K, V> {
         private final K key;
+        public int depth;
         private V value;
+        private Node<K, V> next;
+        private Node<K, V> prev;
 
         public Node(K key, V val) {
             this.key = key;
             this.value = val;
+        }
+
+        public Node<K, V> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<K, V> possibleNext) {
+            this.next = possibleNext;
+        }
+
+        public Node<K, V> getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Node<K, V> prev) {
+            this.prev = prev;
         }
 
         @Override
@@ -32,8 +51,8 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
         }
     }
 
-    private final Node<K, V>[] items;
-    private int size;
+    protected Node<K, V>[] items;
+    protected int size;
 
     protected int getProbe(K k) {
         return 1;
@@ -42,6 +61,9 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
     @SuppressWarnings("unchecked")
     public HashTableImpl(int maxSize) {
         this.items = new Node[maxSize * 2];
+    }
+
+    public HashTableImpl() {
     }
 
     @Override
@@ -65,8 +87,12 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
         return false;
     }
 
-    private int hash(K k) {
-        return k.hashCode() % items.length;
+    protected int hash(K k) {
+        return hash(k, items.length);
+    }
+
+    protected int hash(K k, int length) {
+        return k.hashCode() % length;
     }
 
     @Override
@@ -75,7 +101,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
         return index == -1 ? null : items[index].getValue();
     }
 
-    private int indexOf(K k) {
+    protected int indexOf(K k) {
         int index = hash(k);
         while (items[index] != null) {
             Node<K, V> current = items[index];
