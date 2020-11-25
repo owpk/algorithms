@@ -36,7 +36,7 @@ public class AnotherHashTableImpl<K, V> extends HashTableImpl<K, V> {
             }
         } else
             items[index] = node;
-        size++;
+        ++this.size;
         return true;
     }
 
