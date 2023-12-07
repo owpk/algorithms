@@ -1,9 +1,12 @@
 package ru.geekbrains.ads.lesson4;
 
+import java.util.Iterator;
+import java.util.function.Consumer;
+
 public class SimpleLinkedListImpl<E> implements LinkedList<E> {
 
     protected int size;
-    protected Node<E> firstElement; //001[005]
+    Node<E> firstElement; //001[005]
 
     @Override
     public void insertFirst(E value) {
@@ -96,5 +99,40 @@ public class SimpleLinkedListImpl<E> implements LinkedList<E> {
     @Override
     public E getFirst() {
         return firstElement.item;
+    }
+
+    public static class MyListIterator<E> implements Iterator<E> {
+        private Node<E> node;
+
+        public MyListIterator(SimpleLinkedListImpl<E> linkedList) {
+            node = linkedList.firstElement;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return node != null;
+        }
+
+        @Override
+        public E next() {
+            E e = node.item;
+            node = node.next;
+            return e;
+        }
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new MyListIterator<>(this);
+    }
+
+    @Override
+    public void forEach(Consumer<? super E> action) {
+        Node<E> node = firstElement;
+        do {
+            E e = node.item;
+            node = node.next;
+            action.accept(e);
+        } while (node != null);
     }
 }
