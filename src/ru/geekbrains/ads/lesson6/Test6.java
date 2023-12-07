@@ -1,13 +1,20 @@
 package ru.geekbrains.ads.lesson6;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.function.Predicate;
+
 public class Test6 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 //        testTree();
         testRemoveElement();
     }
 
-    private static void testRemoveElement() {
+    private static void testRemoveElement() throws ExecutionException, InterruptedException {
         Tree<Integer> tree = new TreeImpl<>();
         tree.add(60);
         tree.add(25);
@@ -22,6 +29,22 @@ public class Test6 {
 
         tree.remove(25);
         tree.display();
+        int numOfCores = Runtime.getRuntime().availableProcessors();
+        ExecutorService executorService = Executors.newFixedThreadPool(
+                numOfCores * (1 + 50 / 5));
+        int treesNum = 20;
+        final CountDownLatch cdl = new CountDownLatch(treesNum);
+        List<Integer> resultList = Collections.synchronizedList(new ArrayList<>());
+        for (int i = 0; i < treesNum; i++)
+            executorService.submit(createTreeAndCheckIfBalanced(i, resultList, cdl));
+        cdl.await();
+        System.out.printf("(balanced / unbalanced) k = %f", 1f * count(resultList, 1) /
+                count(resultList, 0));
+        executorService.shutdownNow();
+    }
+
+    private static long count(List<Integer> list, int num) {
+        return list.stream().filter(x -> x == num).count();
     }
 
     private static void testTree() {
@@ -44,5 +67,23 @@ public class Test6 {
 //        tree.traverse(Tree.TraverseMode.IN_ORDER, System.out::println);
 //        tree.traverse(Tree.TraverseMode.PRE_ORDER, System.out::println);
 //        tree.traverse(Tree.TraverseMode.POST_ORDER, System.out::println);
+    }
+
+    public static Runnable createTreeAndCheckIfBalanced(int id, List<Integer> resultList, CountDownLatch cdl) {
+        return () -> {
+            TreeImpl<Integer> tree = new TreeImpl<>();
+            Random r = new Random();
+            while (tree.getCurrentDepth() < tree.MAX_DEPTH) {
+                tree.add(-25 + r.nextInt(50));
+            }
+            boolean balanced = tree.isBalanced(tree.getRoot());
+            synchronized (cdl) {
+                System.out.printf("Tree %d: balanced: %b%n", id, balanced);
+                tree.display();
+            }
+            if (balanced) resultList.add(1);
+            else resultList.add(0);
+            cdl.countDown();
+        };
     }
 }
