@@ -1,6 +1,8 @@
 package Arlgorithms.graph;
 
+import javax.sound.midi.Sequence;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Graph {
     private final List<Vertex> vertexList;
@@ -125,5 +127,91 @@ public class Graph {
         }
         resetVertexState();
     }
+
+    public void findShortest(String start, String end) {
+        int startIndex = indexOf(start);
+        int endIndex = indexOf(end);
+
+        Queue<Node> queue = new LinkedList<>();
+        Vertex startV = vertexList.get(startIndex);
+        Vertex endV = vertexList.get(endIndex);
+
+        Node node = new Node(startV);
+
+        visitVertexAndShowPath(startV, endV, node, node, queue);
+    }
+
+    private void printPretty(Node root, String endPoint) {
+        Stack<String> stack = new Stack<>();
+        Node curr = root;
+        while (curr != null) {
+            stack.add(curr.getVertex().getLabel());
+            curr = curr.prevNode;
+        }
+        while (!stack.isEmpty()) {
+            System.out.print(stack.pop() + " -> ");
+        }
+        System.out.print(endPoint + "\n");
+    }
+
+    private void visitVertexAndShowPath(Vertex startVertex,
+                                        Vertex endVertex,
+                                        Node root,
+                                        Node next,
+                                        Queue<Node> queue) {
+        queue.add(next);
+        next.vertex.setVisited(true);
+
+        if (startVertex.getLabel().equals(endVertex.getLabel())) {
+            printPretty(root, endVertex.getLabel());
+            return;
+        }
+
+        while (!queue.isEmpty()) {
+            Vertex last = queue.peek().getVertex();
+            startVertex = getNearUnvisitedVertex(last);
+
+            if (startVertex != null) {
+                Node nd = new Node(startVertex);
+                nd.prevNode = root;
+                visitVertexAndShowPath(startVertex, endVertex, root, nd, queue);
+            } else {
+                queue.remove();
+                root = queue.peek();
+            }
+        }
+        resetVertexState();
+    }
+
+    private static class Node {
+        private final Vertex vertex;
+        private Node prevNode;
+
+        public Node(Vertex curr) {
+            this.vertex = curr;
+        }
+
+        public Vertex getVertex() {
+            return vertex;
+        }
+
+        public Node getPrevNode() {
+            return prevNode;
+        }
+
+        @Override
+        public String toString() {
+//            StringBuilder sb = new StringBuilder();
+//            Node current = prevNode;
+//            while (current != null) {
+//                sb.append(vertex.getLabel()).append(" ");
+//                current = prevNode.getPrevNode();
+//            }
+//            return sb.toString();
+            return "";
+        }
+
+    }
+
 
 }
