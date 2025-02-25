@@ -1,14 +1,27 @@
-package org.example;
+package org.example.utils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ArrayUtils {
 
-    public static int[][] parse2int(String array) {
+    public static <K> void print(K[][] arr) {
+        System.out.println("[" + Arrays.stream(arr)
+            .map(it -> it.toString())
+            .collect(Collectors.joining(",")) + "]");
+    }
+
+    public static void print(int[][] arr) {
+        System.out.println("[" + Arrays.stream(arr)
+            .map(it -> Arrays.toString(it))
+            .collect(Collectors.joining(",")) + "]");
+    }
+
+    public static int[][] to2dIntArray(String array) {
         var pattern = Pattern.compile("\\[(\\w,?)+\\]");
         var matcher = pattern.matcher(array);
         var result = new ArrayList<Integer[]>();
@@ -33,6 +46,7 @@ public class ArrayUtils {
             .mapToInt(Integer::intValue).toArray();
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T[] toArray(String array, Class<T> clazz) {
         if (array == null || array.length() < 2 || array.charAt(0) != '[' || array.charAt(array.length() - 1) != ']') {
             throw new IllegalArgumentException("Invalid array format: " + array);
@@ -48,7 +62,11 @@ public class ArrayUtils {
         
         for (String element : elements) {
             element = element.trim();
-            if (clazz == Integer.class) {
+            if (element == null) {
+                list.add(null);
+            } else if (element.toString().equals("null")) {
+                list.add(null);
+            } else if (clazz == Integer.class) {
                 list.add(clazz.cast(Integer.parseInt(element)));
             } else if (clazz == Double.class) {
                 list.add(clazz.cast(Double.parseDouble(element)));

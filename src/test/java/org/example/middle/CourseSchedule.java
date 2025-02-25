@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.example.ArrayUtils;
+import org.example.utils.ArrayUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -97,7 +97,7 @@ public class CourseSchedule {
             "'[[1,0],[1,2],[0,1]]', 3, false"
     })
     void test(String prereq, int num, boolean expected) {
-        var result = canFinish(num, ArrayUtils.parse2int(prereq));
+        var result = canFinish(num, ArrayUtils.to2dIntArray(prereq));
         Assertions.assertEquals(expected, result);
     }
 }

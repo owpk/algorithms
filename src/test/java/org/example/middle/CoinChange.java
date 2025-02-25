@@ -1,6 +1,6 @@
 package org.example.middle;
 
-import org.example.ArrayUtils;
+import org.example.utils.ArrayUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -29,7 +29,18 @@ public class CoinChange {
 
     public int coinChange(int[] coins, int amount) {
         if (amount == 0) return 0;
-        return 0;
+
+        var dp = new int[amount + 1];
+
+        for (int i = 1; i < amount + 1; i++) {
+           for (int j = 0; j < coins.length; j++) {
+            var coin = coins[j];
+                if (i >= coin) {
+                    dp[i] = Math.min(i, dp[i - coin] + 1);
+                }
+           }
+        }
+        return dp[amount] == amount + 1 ? -1 : dp[amount];
     }
 
     @ParameterizedTest

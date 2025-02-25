@@ -1,13 +1,11 @@
 package org.example.middle;
 
-import static org.mockito.ArgumentMatchers.endsWith;
-
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
-import java.util.stream.Stream;
+
+import org.example.utils.ArrayUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * You are given an array of non-overlapping intervals intervals where
@@ -43,31 +41,48 @@ public class InsertInterval {
     // [[1,3] [4,6]] | [2,5]
     // [[1,2] [2,3] [4,5] [5,6]]
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        List<int[]> result = new ArrayList<>();
-        int i = 0;
-        int n = intervals.length;
-        
-        // Добавляем все интервалы, которые заканчиваются до начала newInterval
-        while (i < n && intervals[i][1] < newInterval[0]) {
+        var i = 0;
+        var length = intervals.length;
+        var result = new ArrayList<int[]>();
+
+        while (i < length && newInterval[0] > intervals[i][1]) {
             result.add(intervals[i]);
             i++;
         }
-        
-        // Объединяем интервалы, которые пересекаются с newInterval
-        while (i < n && intervals[i][0] <= newInterval[1]) {
+
+        while (i < length && newInterval[0] <= intervals[i][1] 
+                && newInterval[1] >= intervals[i][0]) {
             newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
             newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
             i++;
         }
+
         result.add(newInterval);
-        
-        // Добавляем оставшиеся интервалы
-        while (i < n) {
+
+        while (i < length && newInterval[1] < intervals[i][0]) {
             result.add(intervals[i]);
             i++;
         }
-        
-        // Преобразуем список в массив и возвращаем
+
         return result.toArray(new int[result.size()][]);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "'[[1,4],[6,8]]', '[3,7]', '[[1,8]]'",
+        "'[[1,8]]', '[3,7]', '[[1,8]]'",
+        "'[[1,4]]', '[5,7]', '[[1,4][5,7]]'",
+        "'[[5,7]]', '[1,4]', '[[1,4][5,7]]'",
+        "'[[2,4],[5,6]]', '[5,6]', '[[2,4][5,6]]'",
+        "'[[2,4],[5,6],[9,10]]', '[1,8]', '[[1,8][9,10]]'",
+    })
+    void test(String arr, String interval, String expected) {
+        var a = ArrayUtils.to2dIntArray(arr);
+        var i = ArrayUtils.toIntArray(interval);
+        var e = ArrayUtils.to2dIntArray(expected);
+        var result = insert(a, i);
+
+        ArrayUtils.print(result);
+        Assertions.assertEquals(e.length, result.length);
     }
 }
